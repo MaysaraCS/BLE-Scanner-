@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: ElevatedButton(onPressed: ()=>controller.scanDevices(),
+                  child: ElevatedButton(onPressed: ()=>controller.startScan(),
                       style:ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.blue,
@@ -68,9 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             return Card(
                               elevation: 2,
                               child: ListTile(
-                                title: Text(data.device.name),
-                                subtitle: Text(data.device.id.id),
-                                trailing: Text(data.rssi.toString()),
+                                title: Text(data.device.platformName),
+                                // subtitle: Text(data.device.remoteId),
+                                subtitle: Text(data.device.remoteId.toString()),
+                                // trailing: Text(data.rssi.toString()),
+                                trailing: Text("RSSI: ${data.rssi}"),
+                                // for connection
+                                //onTap: ()=> controller.connectToDevice(data.device),
                               ),
                             );
                           }
