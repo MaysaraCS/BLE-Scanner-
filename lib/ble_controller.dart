@@ -1,29 +1,24 @@
-import 'package:get/get.dart';
-// import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:async';
-import 'dart:math';
 import 'dart:convert';
+import 'dart:math';
 
-class BleController extends GetxController {
-  // FlutterBluePlus ble = FlutterBluePlus();
+class BleController {
+  final List<ScanResult> scanResults = [];
+  final Map<String, bool> connectionStatus = {};
+  BluetoothDevice? selectedDevice; // Currently connected device
+  List<BluetoothService> services = [];
+  final Map<String, String> readValues = {};
 
-  final RxList<ScanResult> _scanResults = <ScanResult>[].obs; // Reactive scan results
-  final RxList<BluetoothService> _services = <BluetoothService>[].obs; // Reactive services list
-  final RxMap<String, String> _readValues = <String, String>{}.obs; // Reactive read values
-  BluetoothDevice? _selectedDevice; // Currently connected device
-  final Map<String, bool> _connectionStatus = {};
-
-  Future startScan() async {
+  void startScan(Function updateState) {
     FlutterBluePlus.startScan(timeout: const Duration(seconds: 4)).catchError((error) {
       print("Error starting scan: $error");
     });
 
     FlutterBluePlus.scanResults.listen((results) {
-      _scanResults.value = results; // Update scan results
+      scanResults.clear();
+      scanResults.addAll(results);
+      updateState(); // Call this function to update UI
     });
 
     Future.delayed(const Duration(seconds: 4), () {
@@ -31,28 +26,87 @@ class BleController extends GetxController {
     });
   }
 
-  // Discover services for a connected device
-  Future<void> discoverServices(BluetoothDevice device) async {
-    List<BluetoothService> services = await device.discoverServices();
-    _services.value = services; // Update services reactively
+  void connectToDevice(BluetoothDevice device, Function updateState, Function showSnackbar) {
+    device.connect(
+      autoConnect: false,
+      timeout: const Duration(seconds: 10),
+    ).then((_) {
+      connectionStatus[device.remoteId.str] = true;
+      selectedDevice = device;
+      _discoverServices(device, updateState);
+      showSnackbar("Connected to ${device.platformName}");
+    }).catchError((error) {
+      showSnackbar("Failed to connect: $error");
+      attemptReconnect(device, updateState, showSnackbar);
+    });
   }
 
-  // Read characteristic and decode the value
-  Future<void> readCharacteristic(BluetoothCharacteristic characteristic) async {
+  void disconnectFromDevice(Function updateState, Function showSnackbar) {
+    if (selectedDevice != null) {
+      selectedDevice!.disconnect().then((_) {
+        connectionStatus[selectedDevice!.remoteId.str] = false;
+        services.clear();
+        readValues.clear();
+        selectedDevice = null;
+        updateState();
+        showSnackbar("Disconnected from ${selectedDevice!.platformName}");
+      }).catchError((error) {
+        showSnackbar("Failed to disconnect: $error");
+      });
+    }
+  }
+
+  void attemptReconnect(BluetoothDevice device, Function updateState, Function showSnackbar) {
+    int attempts = 0;
+    const maxAttempts = 3;
+
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (attempts < maxAttempts) {
+        device.connect(
+          autoConnect: false,
+          timeout: const Duration(seconds: 10),
+        ).then((_) {
+          connectionStatus[device.remoteId.str] = true;
+          selectedDevice = device;
+          _discoverServices(device, updateState);
+          showSnackbar("Reconnected to ${device.platformName}");
+          timer.cancel();
+        }).catchError((error) {
+          print("Reconnection attempt failed");
+          attempts++;
+        });
+      } else {
+        timer.cancel();
+        showSnackbar("Max reconnection attempts reached. Please check the device or environment.");
+      }
+    });
+  }
+
+  void _discoverServices(BluetoothDevice device, Function updateState) async {
+    List<BluetoothService> discoveredServices = await device.discoverServices();
+    services = discoveredServices;
+    updateState(); // Call this function to update UI
+  }
+
+  void readCharacteristic(BluetoothCharacteristic characteristic, Function updateState, Function showSnackbar) async {
     var value = await characteristic.read();
     String decodedValue = utf8.decode(value);
-    _readValues[characteristic.uuid.toString()] = decodedValue; // Update the read values map
-
-    // Instead of using context, use GetX's snackbar
-    Get.snackbar(
-      'Characteristic Read',
-      'Read value: $decodedValue',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blueAccent,
-      colorText: Colors.white,
-    );
+    readValues[characteristic.uuid.toString()] = decodedValue;
+    updateState();
+    showSnackbar('Read value: $decodedValue');
   }
 
-  Stream<List<ScanResult>> get scanResults => FlutterBluePlus.scanResults;
-}
+  void writeCharacteristic(BluetoothCharacteristic characteristic, Function showSnackbar) async {
+    int randomValue = Random().nextInt(999) + 1; // Random number between 1 and 999
+    List<int> value = [randomValue & 0xFF, (randomValue >> 8) & 0xFF];
+    await characteristic.write(value);
+    showSnackbar('Written value: $randomValue');
+  }
 
+  void setNotification(BluetoothCharacteristic characteristic, Function showSnackbar) async {
+    await characteristic.setNotifyValue(true);
+    characteristic.lastValueStream.listen((value) {
+      showSnackbar('Notification value: $value from ${characteristic.uuid}');
+    });
+  }
+}
