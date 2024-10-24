@@ -6,22 +6,55 @@ class BleController extends GetxController{
 
   final List<ScanResult> _scanResults = [];
   final Map<String, bool> _connectionStatus = {};
-  var _observedScanResults = <ScanResult>[].obs;  // Renamed to avoid conflict
+  var _observedScanResults = <ScanResult>[].obs;
 
-  Future scanDevices() async{
+  // Future scanDevices() async{
+  //   if(await Permission.bluetoothScan.request().isGranted){
+  //       FlutterBluePlus.startScan(timeout: const Duration(seconds: 60));
+  //       Future.delayed(const Duration(seconds: 60), () {
+  //         FlutterBluePlus.scanResults.listen((results) {
+  //           print(results);
+  //           _observedScanResults.assignAll(results);
+  //         });
+  //         FlutterBluePlus.stopScan();
+  //       });
+  //       // print("hello world");
+  //       //FlutterBluePlus.stopScan();
+  //     }
+  //
+  //     // Future.delayed(const Duration(seconds: 60), () {
+  //     //   FlutterBluePlus.stopScan();
+  //     // });
+  //   }
+  Future scanDevicesTwo() async{
     if(await Permission.bluetoothScan.request().isGranted){
-      if(await Permission.bluetoothConnect.request().isGranted){
-        FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
-        //FlutterBluePlus.stopScan();
-      }
-      FlutterBluePlus.scanResults.listen((results) {
-        _observedScanResults.assignAll(results);
-      });
-      Future.delayed(const Duration(seconds: 15), () {
+
+      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 20),continuousUpdates: true);
+
+      await Future.delayed(const Duration(seconds: 20), () {
+        FlutterBluePlus.onScanResults.listen((results) {
+          print(results);
+          _observedScanResults.assignAll(results);
+        },onError: (error){
+          print(error);
+        });
         FlutterBluePlus.stopScan();
       });
+      // print("hello world");
+      //FlutterBluePlus.stopScan();
     }
-  }
 
-  Stream<List<ScanResult>> get scanResults => FlutterBluePlus.scanResults;
+    // Future.delayed(const Duration(seconds: 60), () {
+    //   FlutterBluePlus.stopScan();
+    // });
+  }
+  Future DisplayResult() async{
+    FlutterBluePlus.onScanResults.listen((results) {
+      print(results);
+      _observedScanResults.assignAll(results);
+    });
+  }
+  Stream<List<ScanResult>> get onScanResults => FlutterBluePlus.onScanResults;
+
 }
+

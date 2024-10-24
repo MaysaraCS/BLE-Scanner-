@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: ElevatedButton(onPressed: ()=>controller.scanDevices(),
+                  child: ElevatedButton(onPressed: ()=>controller.scanDevicesTwo(),
                       style:ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blue,
@@ -52,10 +52,27 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: const Text("Scan",
                         style: TextStyle(fontSize:18 ),
                       )),
+
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(onPressed: ()=>controller.DisplayResult(),
+                      style:ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue,
+                          minimumSize: const Size(350, 55),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          )
+                      ),
+                      child: const Text("display result",
+                        style: TextStyle(fontSize:18 ),
+                      )),
+
                 ),
                 const SizedBox(height: 20),
                 StreamBuilder<List<ScanResult>>(
-                    stream: controller.scanResults,
+                    stream: controller.onScanResults,
                     builder:(context, snapshot){
                       if(snapshot.hasData){
                         return ListView.builder(
