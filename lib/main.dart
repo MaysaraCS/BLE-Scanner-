@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ble_scanner_app/MyHomePage.dart';
-import 'dart:async';
-import 'package:ble_scanner_app/MyHomePage.dart';
 
 
 void main() {
@@ -14,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Bluetooth Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MyHomePage(),

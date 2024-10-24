@@ -1,5 +1,8 @@
+import 'package:ble_scanner_app/ble_controller.dart';
 import 'package:flutter/material.dart';
-import 'ble_controller.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:get/get.dart';
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -9,123 +12,79 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late BleController _bleController;
-
-  @override
-  void initState() {
-    super.initState();
-    _bleController = BleController(); // Instantiate the BleController
-  }
-
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.blueAccent,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Bluetooth Device Scanner"),
-      ),
-      body: Center(
-        child: _bleController.scanResults.isEmpty
-            ? const Text('Scanning for Bluetooth devices...')
-            : Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: _bleController.scanResults.length,
-                itemBuilder: (context, index) {
-                  final device = _bleController.scanResults[index].device;
-                  final bool isConnected = _bleController.connectionStatus[device.remoteId.str] ?? false;
-
-                  return ListTile(
-                    leading: const Icon(Icons.bluetooth),
-                    title: Text(device.platformName.isEmpty ? 'Unknown Device' : device.platformName),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(device.remoteId.str),
-                        Text('RSSI: ${_bleController.scanResults[index].rssi}'),
-                      ],
+      // appBar: AppBar(title: Text("BLE SCANNER"),),
+      body: GetBuilder<BleController>(
+        init: BleController(),
+        builder: (controller) {
+          return SingleChildScrollView(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 150,
+                  width:double.infinity,
+                  color: Colors.blue,
+                  child: Center(
+                    child: Text(
+                        "BLE SCANNER",
+                        style:TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        )
                     ),
-                    trailing: TextButton(
-                      onPressed: () {
-                        if (isConnected) {
-                          _bleController.disconnectFromDevice(() => setState(() {}), _showSnackBar);
-                        } else {
-                          _bleController.connectToDevice(device, () => setState(() {}), _showSnackBar);
-                        }
-                      },
-                      child: Text(isConnected ? 'Disconnect' : 'Connect'),
-                    ),
-                  );
-                },
-              ),
-            ),
-            if (_bleController.services.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _bleController.services.length,
-                  itemBuilder: (context, index) {
-                    final service = _bleController.services[index];
-                    return ExpansionTile(
-                      title: Text('Service ${service.uuid}'),
-                      children: service.characteristics.map((characteristic) {
-                        return ListTile(
-                          title: Text('Characteristic ${characteristic.uuid}'),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (characteristic.properties.read)
-                                Row(
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () => _bleController.readCharacteristic(
-                                        characteristic,
-                                            () => setState(() {}),
-                                        _showSnackBar,
-                                      ),
-                                      child: const Text('Read'),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      _bleController.readValues[characteristic.uuid.toString()] ?? 'No value',
-                                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              if (characteristic.properties.write)
-                                ElevatedButton(
-                                  onPressed: () => _bleController.writeCharacteristic(characteristic, _showSnackBar),
-                                  child: const Text('Write Random Value'),
-                                ),
-                              if (characteristic.properties.notify)
-                                ElevatedButton(
-                                  onPressed: () => _bleController.setNotification(characteristic, _showSnackBar),
-                                  child: const Text('Set Notification'),
-                                ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
+                  ),
                 ),
-              ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _bleController.startScan(() => setState(() {})),
-        tooltip: 'Rescan',
-        child: const Icon(Icons.refresh),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(onPressed: ()=>controller.scanDevices(),
+                      style:ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue,
+                          minimumSize: const Size(350, 55),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          )
+                      ),
+                      child: const Text("Scan",
+                        style: TextStyle(fontSize:18 ),
+                      )),
+                ),
+                const SizedBox(height: 20),
+                StreamBuilder<List<ScanResult>>(
+                    stream: controller.scanResults,
+                    builder:(context, snapshot){
+                      if(snapshot.hasData){
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context,index)
+                            {
+                              final data = snapshot.data![index];
+                              return Card(
+                                elevation: 2,
+                                child: ListTile(
+                                  //title: Text(data.device.name),
+                                  title: Text(data.device.platformName.toString()),
+                                  // subtitle: Text(data.device.id.id),
+                                  subtitle: Text(data.device.remoteId.toString()),
+                                  trailing: Text(data.rssi.toString()),
+                                ),
+                              );
+                            }
+                        );
+
+                      }else {
+                        return const Center(child: Text("No Device Found"));
+                      }
+                    } )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
