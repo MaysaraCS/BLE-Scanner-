@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: ElevatedButton(onPressed: ()=>controller.scanDevicesTwo(),
+                  child: ElevatedButton(onPressed: ()=>controller.scanDevices(),
                       style:ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.blue,
@@ -52,23 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: const Text("Scan",
                         style: TextStyle(fontSize:18 ),
                       )),
-
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(onPressed: ()=>controller.DisplayResult(),
-                      style:ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.blue,
-                          minimumSize: const Size(350, 55),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          )
-                      ),
-                      child: const Text("display result",
-                        style: TextStyle(fontSize:18 ),
-                      )),
-
                 ),
                 const SizedBox(height: 20),
                 StreamBuilder<List<ScanResult>>(
@@ -84,9 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               return Card(
                                 elevation: 2,
                                 child: ListTile(
-                                  //title: Text(data.device.name),
-                                  title: Text(data.device.platformName.toString()),
-                                  // subtitle: Text(data.device.id.id),
+                                  title: Text(data.device.platformName),
                                   subtitle: Text(data.device.remoteId.toString()),
                                   trailing: Text(data.rssi.toString()),
                                 ),
