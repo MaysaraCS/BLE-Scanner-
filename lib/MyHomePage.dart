@@ -62,27 +62,40 @@ class _MyHomePageState extends State<MyHomePage> {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           final data = snapshot.data![index];
+                          final serviceData =
+                              data.advertisementData.serviceData;
+
                           return Card(
                             elevation: 2,
                             child: ListTile(
                               title: Text(
-                                data.advertisementData.localName.isNotEmpty
-                                    ? data.advertisementData.localName
+                                data.advertisementData.advName.isNotEmpty
+                                    ? data.advertisementData.advName
                                     : data.device.platformName,
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("ID: ${data.device.remoteId.toString()}"),
-                                  Text("Services: ${data.advertisementData.serviceUuids.join(", ")}"),
-                                  Text("Connectable: ${data.advertisementData.connectable ? "Yes" : "No"}"),
+                                  Text("ID: ${data.device.remoteId}"),
+                                  for (var entry in serviceData.entries)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Service UUID: ${entry.key}"),
+                                        Text("URL: ${entry.value}"),
+                                        Text(
+                                            "Hex Value: ${entry.value.map((b) => b.toRadixString(16).padLeft(2, '0')).join()}"),
+                                      ],
+                                    ),
                                 ],
                               ),
                               trailing: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text("RSSI: ${data.rssi.toString()}"),
-                                  Text("Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}"),
+                                  Text("RSSI: ${data.rssi}"),
+                                  Text(
+                                      "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}"),
                                 ],
                               ),
                             ),
