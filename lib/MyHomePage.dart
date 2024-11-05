@@ -1,9 +1,7 @@
-import 'dart:convert';
-
-import 'package:ble_scanner_app/ble_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
+import 'package:ble_scanner_app/ble_controller.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:typed_data';
 import 'package:uuid/uuid.dart';
 
@@ -20,7 +18,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: GetBuilder<BleController>(
         init: BleController.uid(),
-        // init: BleController.tlm(),
         builder: (controller) {
           return Column(
             children: [
@@ -70,15 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           final data = snapshot.data![index];
                           final serviceData =
                               data.advertisementData.serviceData;
-                              
+                              //final uid = BleController.uid();
+                              final tlm = BleController.tlm();
 
-                          // Extract UID and TLM if they exist in service data
-                          // final uid =
-                          //     serviceData[Uint8List.fromList([0xAA, 0xFE])];
-                          // final tlm =
-                          //     serviceData[Uint8List.fromList([0xAA, 0xFE])];
-                          final uid = BleController.uid();
-                          final tlm = BleController.tlm();
 
                           return Card(
                             elevation: 3,
@@ -101,34 +92,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const SizedBox(height: 5),
                                   Text("MAC Address: ${data.device.remoteId}"),
                                   Text("RSSI: ${data.rssi}"),
-                                  // Text("local name: ${data.device.localName}"),
-                                  // Text("adv name: ${data.device.advName}"),
                                   const SizedBox(height: 5),
-                                  Text(
-                                      "UID: ${uid.serviceData.isNotEmpty ? uid : 'N/A'}"),
-                                  // Text(
-                                  //     "UID: ${uid != null ? uid.toString() : 'N/A'}"),
+
+                                  // Access the reactive URL variable
+                                  Obx(() => Text(
+                                      "URL: ${controller.url.value}")), // Displays the URL
 
                                   Text(
                                       "UUID Key: ${data.advertisementData.serviceUuids}"),
-
                                   Text("UUID v1: ${uuid.v1()}"),
                                   Text("UUID v4: ${uuid.v4()}"),
-
-                                  // Text(
-                                  //     "UUID Value: ${serviceData.values.isNotEmpty ? serviceData.values.first : 'N/A'}"),
                                   Text("serviceData: ${serviceData}"),
-                                
+                                  // Text(
+                                  //     "TLM: ${data.advertisementData.txPowerLevel}"),
                                   Text(
-                                      "TLM: ${data.advertisementData.txPowerLevel}"),
-                                  // Text(
-                                  //     "TLM: ${tlm.serviceData.isNotEmpty ? tlm : 'N/A'}"),
-                                  // Text(
-                                  //     "TLM: ${tlm != null ? tlm.toString() : 'N/A'}"),
-
-                                  // Text(
-                                  //   "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}",
-                                  // ),
+                                      "TLM: ${tlm.serviceData.isNotEmpty ? tlm : 'N/A'}"),
                                 ],
                               ),
                             ),
