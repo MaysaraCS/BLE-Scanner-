@@ -12,7 +12,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,12 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               data.advertisementData.serviceData;
 
                           // Extract UID and TLM if they exist in service data
-                          final uid =
-                              serviceData[Uint8List.fromList([0xAA, 0xFE])] ??
-                                  Uint8List(0); // UID data (if exists)
-                          final tlm =
-                              serviceData[Uint8List.fromList([0xAA, 0xFE])] ??
-                                  Uint8List(0); // TLM data (if exists)
+                          // final uid =
+                          //     serviceData[Uint8List.fromList([0xAA, 0xFE])];
+                          // final tlm =
+                          //     serviceData[Uint8List.fromList([0xAA, 0xFE])];
+                          final uid = BleController.uid();
+                          final tlm = BleController.tlm();
 
                           return Card(
                             elevation: 3,
@@ -98,10 +97,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Text("MAC Address: ${data.device.remoteId}"),
                                   Text("RSSI: ${data.rssi}"),
                                   const SizedBox(height: 5),
-                                  Text("UID: ${uid.isNotEmpty ? uid : 'N/A'}"),
+                                  Text(
+                                      "UID: ${uid.uuidListValue.isNotEmpty ? uid : 'N/A'}"),
+                                  // Text(
+                                  //     "UID: ${uid != null ? uid.toString() : 'N/A'}"),
+
                                   Text(
                                       "UUID: ${serviceData.keys.isNotEmpty ? serviceData.keys.first : 'N/A'}"),
-                                  Text("TLM: ${tlm.isNotEmpty ? tlm : 'N/A'}"),
+                                  Text(
+                                      "TLM: ${tlm.serviceData.isNotEmpty ? tlm : 'N/A'}"),
+                                  // Text(
+                                  //     "TLM: ${tlm != null ? tlm.toString() : 'N/A'}"),
+
                                   Text(
                                     "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}",
                                   ),

@@ -54,10 +54,7 @@ class BleController extends GetxController {
   Future<void> scanDevices() async {
     // Check for Bluetooth scan permission
     if (await Permission.bluetoothScan.request().isGranted) {
-      await FlutterBluePlus.startScan(
-        timeout: const Duration(seconds: 20),
-        continuousUpdates: true,
-      );
+      FlutterBluePlus.startScan(continuousUpdates: true);
 
       // Listen for scan results
       FlutterBluePlus.onScanResults.listen((results) {
