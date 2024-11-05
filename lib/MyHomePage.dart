@@ -2,6 +2,7 @@ import 'package:ble_scanner_app/ble_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
+import 'dart:typed_data';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -11,11 +12,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<BleController>(
-        init: BleController(),
+        init: BleController.uid(),
+        // init: BleController.tlm(),
         builder: (controller) {
           return Column(
             children: [
@@ -55,9 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 20),
               Expanded(
                 child: StreamBuilder<List<ScanResult>>(
-                  stream: controller.onScanResults,
+                  stream: controller.onFilteredScanResults,
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
@@ -65,37 +68,43 @@ class _MyHomePageState extends State<MyHomePage> {
                           final serviceData =
                               data.advertisementData.serviceData;
 
+                          // Extract UID and TLM if they exist in service data
+                          final uid =
+                              serviceData[Uint8List.fromList([0xAA, 0xFE])] ??
+                                  Uint8List(0); // UID data (if exists)
+                          final tlm =
+                              serviceData[Uint8List.fromList([0xAA, 0xFE])] ??
+                                  Uint8List(0); // TLM data (if exists)
+
                           return Card(
-                            elevation: 2,
-                            child: ListTile(
-                              title: Text(
-                                data.advertisementData.advName.isNotEmpty
-                                    ? data.advertisementData.advName
-                                    : data.device.platformName,
-                              ),
-                              subtitle: Column(
+                            elevation: 3,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("ID: ${data.device.remoteId}"),
-                                  for (var entry in serviceData.entries)
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Service UUID: ${entry.key}"),
-                                        Text("URL: ${entry.value}"),
-                                        Text(
-                                            "Hex Value: ${entry.value.map((b) => b.toRadixString(16).padLeft(2, '0')).join()}"),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                              trailing: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text("RSSI: ${data.rssi}"),
                                   Text(
-                                      "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}"),
+                                    data.advertisementData.advName.isNotEmpty
+                                        ? data.advertisementData.advName
+                                        : data.device.platformName,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text("MAC Address: ${data.device.remoteId}"),
+                                  Text("RSSI: ${data.rssi}"),
+                                  const SizedBox(height: 5),
+                                  Text("UID: ${uid.isNotEmpty ? uid : 'N/A'}"),
+                                  Text(
+                                      "UUID: ${serviceData.keys.isNotEmpty ? serviceData.keys.first : 'N/A'}"),
+                                  Text("TLM: ${tlm.isNotEmpty ? tlm : 'N/A'}"),
+                                  Text(
+                                    "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}",
+                                  ),
                                 ],
                               ),
                             ),

@@ -1,0 +1,236 @@
+advertisment data:
+I/flutter (31168): remote ID: C3:00:00:1C:76:53
+I/flutter (31168): appearance: null
+I/flutter (31168): connectable: false
+I/flutter (31168): manufacturerData: {}
+I/flutter (31168): msd: []
+I/flutter (31168): serviceUuids: [ffe1]
+I/flutter (31168): txPowerLevel: null
+I/flutter (31168): service data {ffe1: [161, 8, 100, 83, 118, 28, 0, 0, 195, 71, 97, 116, 101, 115, 84, 97, 103]}
+I/flutter (31168): UUID: ffe1
+I/flutter (31168): Service UUID: ffe1, Hex Value: a1086453761c0000c34761746573546167
+
+
+
+advertisment data: 
+I/flutter (31168): remote ID: C3:00:00:1C:76:52
+I/flutter (31168): appearance: null
+I/flutter (31168): connectable: false
+I/flutter (31168): manufacturerData: {}
+I/flutter (31168): msd: []
+I/flutter (31168): serviceUuids: [feaa]
+I/flutter (31168): txPowerLevel: null
+I/flutter (31168): service data {feaa: [16, 232, 1, 103, 97, 116, 101, 115, 112, 97, 121, 46, 109, 121]}
+I/flutter (31168): UUID: feaa
+I/flutter (31168): Service UUID: feaa, Hex Value: 10e80167617465737061792e6d79
+
+
+
+advertisment data:
+I/flutter (31168): remote ID: C3:00:00:1C:76:51
+I/flutter (31168): appearance: null
+I/flutter (31168): connectable: false
+I/flutter (31168): manufacturerData: {}
+I/flutter (31168): msd: []
+I/flutter (31168): serviceUuids: [ffe1]
+I/flutter (31168): txPowerLevel: null
+I/flutter (31168): service data {ffe1: [161, 8, 100, 81, 118, 28, 0, 0, 195, 71, 97, 116, 101, 115, 84, 97, 103]}
+I/flutter (31168): UUID: ffe1
+I/flutter (31168): Service UUID: ffe1, Hex Value: a1086451761c0000c34761746573546167
+
+
+
+
+___________________________________________
+I/flutter (31168): ////////////////////////////////////////////////
+I/flutter (31168): advertisment name: 
+I/flutter (31168): bondState: Instance of '_ControllerStream<BluetoothBondState>'
+I/flutter (31168): connectionState: Instance of '_BroadcastStream<BluetoothConnectionState>'
+I/flutter (31168): disconnectReason: null
+I/flutter (31168): hashCode: 1012295209
+I/flutter (31168): isAutoConnectEnabled: false
+I/flutter (31168): isConnected: false
+I/flutter (31168): isDisconnected: true
+I/flutter (31168): mtu: Instance of '_BroadcastStream<int>'
+I/flutter (31168): mtuNow: 23
+I/flutter (31168): onServicesReset: Instance of '_MapStream<BmBluetoothDevice, void>'
+I/flutter (31168): platformName:
+I/flutter (31168): ___________________________________________
+I/flutter (31168): ////////////////////////////////////////////////
+I/flutter (31168): advertisment data:
+I/flutter (31168): remote ID: C3:00:00:1C:76:53
+I/flutter (31168): appearance: null
+I/flutter (31168): connectable: false
+I/flutter (31168): manufacturerData: {}
+I/flutter (31168): msd: []
+I/flutter (31168): serviceUuids: [feaa]
+I/flutter (31168): txPowerLevel: null
+I/flutter (31168): service data {feaa: [16, 232, 1, 103, 97, 116, 101, 115, 112, 97, 121, 46, 109, 121]}
+I/flutter (31168): UUID: feaa
+I/flutter (31168): Service UUID: feaa, Hex Value: 10e80167617465737061792e6d79
+
+
+
+
+////////////////////////////////////////////////
+I/flutter (31168): advertisment name:
+I/flutter (31168): bondState: Instance of '_ControllerStream<BluetoothBondState>'
+I/flutter (31168): connectionState: Instance of '_BroadcastStream<BluetoothConnectionState>'
+I/flutter (31168): disconnectReason: null
+I/flutter (31168): hashCode: 683687680
+I/flutter (31168): isAutoConnectEnabled: false
+I/flutter (31168): isConnected: false
+I/flutter (31168): isDisconnected: true
+I/flutter (31168): mtu: Instance of '_BroadcastStream<int>'
+I/flutter (31168): mtuNow: 23
+I/flutter (31168): onServicesReset: Instance of '_MapStream<BmBluetoothDevice, void>'
+I/flutter (31168): platformName:
+I/flutter (31168): ___________________________________________
+I/flutter (31168): ////////////////////////////////////////////////
+I/flutter (31168): advertisment data:
+I/flutter (31168): remote ID: C3:00:00:1C:76:51
+I/flutter (31168): appearance: null
+I/flutter (31168): connectable: false
+I/flutter (31168): manufacturerData: {}
+I/flutter (31168): msd: []
+I/flutter (31168): serviceUuids: [feaa]
+I/flutter (31168): txPowerLevel: null
+I/flutter (31168): service data {feaa: [16, 232, 1, 103, 97, 116, 101, 115, 112, 97, 121, 46, 109, 121]}
+I/flutter (31168): UUID: feaa
+I/flutter (31168): Service UUID: feaa, Hex Value: 10e80167617465737061792e6d79
+
+
+////////////////////////////////////////////////
+I/flutter (31168): advertisment name:
+I/flutter (31168): bondState: Instance of '_ControllerStream<BluetoothBondState>'
+I/flutter (31168): connectionState: Instance of '_BroadcastStream<BluetoothConnectionState>'
+I/flutter (31168): disconnectReason: null
+I/flutter (31168): hashCode: 295571644
+I/flutter (31168): isAutoConnectEnabled: false
+I/flutter (31168): isConnected: false
+I/flutter (31168): isDisconnected: true
+I/flutter (31168): mtu: Instance of '_BroadcastStream<int>'
+I/flutter (31168): mtuNow: 23
+I/flutter (31168): onServicesReset: Instance of '_MapStream<BmBluetoothDevice, void>'
+I/flutter (31168): platformName:
+I/flutter (31168): ___________________________________________
+I/flutter (31168): ////////////////////////////////////////////////
+I/flutter (31168): advertisment data:
+I/flutter (31168): remote ID: C3:00:00:1C:76:52
+I/flutter (31168): appearance: null
+I/flutter (31168): connectable: false
+I/flutter (31168): manufacturerData: {}
+I/flutter (31168): msd: []
+I/flutter (31168): serviceUuids: [feaa]
+I/flutter (31168): txPowerLevel: null
+I/flutter (31168): service data {feaa: [16, 232, 1, 103, 97, 116, 101, 115, 112, 97, 121, 46, 109, 121]}
+I/flutter (31168): UUID: feaa
+I/flutter (31168): Service UUID: feaa, Hex Value: 10e80167617465737061792e6d79
+
+
+
+
+ final serviceData_2 = result.device;
+    print('___________________________________________');
+    print('////////////////////////////////////////////////');
+    print('advertisment name: ${result.device.advName}');
+    print('bondState: ${result.device.bondState}');
+    print('connectionState: ${result.device.connectionState}');
+    print('disconnectReason: ${result.device.disconnectReason}');
+    print('hashCode: ${result.device.hashCode}');
+    print('isAutoConnectEnabled: ${result.device.isAutoConnectEnabled}');
+    print('isConnected: ${result.device.isConnected}');
+    print('isDisconnected: ${result.device.isDisconnected}');
+    print('mtu: ${result.device.mtu}');
+    print('mtuNow: ${result.device.mtuNow}');
+    print('onServicesReset: ${result.device.onServicesReset}');
+    print('platformName: ${result.device.platformName}');
+
+    print('___________________________________________');
+    print('////////////////////////////////////////////////');
+
+    print('advertisment data: ${result.advertisementData.advName}');
+    print('remote ID: ${result.device.remoteId}');
+    print('appearance: ${result.advertisementData.appearance}');
+    print('connectable: ${result.advertisementData.connectable}');
+    print('manufacturerData: ${result.advertisementData.manufacturerData}');
+    print('msd: ${result.advertisementData.msd}');
+    print('serviceUuids: ${result.advertisementData.serviceUuids}');
+    print('txPowerLevel: ${result.advertisementData.txPowerLevel}');
+    print('service data $serviceData');
+
+
+
+    ok so now I want to define the advertising data for example here in c language it was like this (
+        typedef struct{
+            // byte by byte for each flag
+            // flags 
+            uint8_t flags_len;
+            uint8_t flags_type;
+            uint8_t flags_value;
+
+            // next is for 16 bit UUID 
+            uint8_t uuid_list_len;
+            uint8_t uuid_list_type;
+            uint8_t uuid_list_value[2];
+
+            union{
+                uint8_t service_data_uid[20];
+                uint8_t service_data_tlm[14];
+            };
+            static const eddystone_data_t adv_data_uid={
+                // flag
+                .flags_len = 0x02,
+                .flags_type = 0x01,
+                .flags_value = 0x06,
+
+                //16-bit UUID list
+                .uuid_list_len = 0x03,
+                .uuid_list_type = 0x03,
+                .uuid_list_value = {0xAA,0xFE}, // little endian UUID (0xFEAA)
+
+                // 16-bit UUID sERVICE DATA
+                .service_data_len = 0x17,
+                .service_data_type = 0x16,
+                .service_data_uuid = {0xAA,0xFE}, // little endian UUID (0xFEAA)
+                .service_data_uid= {0x00,\ 
+                                    0x00,\ 
+                                    0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,\
+                                    0x11,0x022,0x33,0x44,0x55,0x66,\
+                                    0x00,0x00 \
+                }
+
+            };
+            static const eddystone_data_t adv_data_tlm={
+                // flag
+                .flags_len = 0x02,
+                .flags_type = 0x01,
+                .flags_value = 0x06,
+
+                //16-bit UUID list
+                .uuid_list_len = 0x03,
+                .uuid_list_type = 0x03,
+                .uuid_list_value = {0xAA,0xFE}, // little endian UUID (0xFEAA)
+
+                // 16-bit UUID sERVICE DATA
+                .service_data_len = 0x11,
+                .service_data_type = 0x16,
+                .service_data_uuid = {0xAA,0xFE}, // little endian UUID (0xFEAA)
+                .service_data_uid= {0x20,\ 
+                                    0x00,\ 
+                                    0x00,0x64,\
+                                    0x48,0x80,\
+                                    0x00,0x00,0x00,0x01,\
+                                    0x00,0x00,0x00,0x02, \
+                }
+                                    
+            };
+
+
+
+        }eddystone_data;
+    )
+    so now how would I do the same thing in flutter using flutter blue plus 
+
+
+
