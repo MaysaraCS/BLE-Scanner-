@@ -3,6 +3,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
+import 'package:uuid/uuid.dart';
+
 
 class BleController extends GetxController {
   var _observedScanResults = <ScanResult>[].obs;
@@ -69,24 +71,6 @@ class BleController extends GetxController {
       print("Bluetooth scan permission denied.");
     }
   }
-
-  // // Start advertising UID using MethodChannel
-  // Future<void> startAdvertisingUID() async {
-  //   try {
-  //     await platform.invokeMethod('startAdvertisingUID');
-  //   } catch (e) {
-  //     print("Failed to start UID advertising: $e");
-  //   }
-  // }
-
-  // // Start advertising TLM using MethodChannel
-  // Future<void> startAdvertisingTLM() async {
-  //   try {
-  //     await platform.invokeMethod('startAdvertisingTLM');
-  //   } catch (e) {
-  //     print("Failed to start TLM advertising: $e");
-  //   }
-  // }
 
   // Stream of filtered scan results
   Stream<List<ScanResult>> get onFilteredScanResults => _observedScanResults.stream;

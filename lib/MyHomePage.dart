@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:ble_scanner_app/ble_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'dart:typed_data';
+import 'package:uuid/uuid.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -63,9 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
+                          var uuid = Uuid();
                           final data = snapshot.data![index];
                           final serviceData =
                               data.advertisementData.serviceData;
+                              
 
                           // Extract UID and TLM if they exist in service data
                           // final uid =
@@ -96,22 +101,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const SizedBox(height: 5),
                                   Text("MAC Address: ${data.device.remoteId}"),
                                   Text("RSSI: ${data.rssi}"),
+                                  // Text("local name: ${data.device.localName}"),
+                                  // Text("adv name: ${data.device.advName}"),
                                   const SizedBox(height: 5),
                                   Text(
-                                      "UID: ${uid.uuidListValue.isNotEmpty ? uid : 'N/A'}"),
+                                      "UID: ${uid.serviceData.isNotEmpty ? uid : 'N/A'}"),
                                   // Text(
                                   //     "UID: ${uid != null ? uid.toString() : 'N/A'}"),
 
                                   Text(
-                                      "UUID: ${serviceData.keys.isNotEmpty ? serviceData.keys.first : 'N/A'}"),
+                                      "UUID Key: ${data.advertisementData.serviceUuids}"),
+
+                                  Text("UUID v1: ${uuid.v1()}"),
+                                  Text("UUID v4: ${uuid.v4()}"),
+
+                                  // Text(
+                                  //     "UUID Value: ${serviceData.values.isNotEmpty ? serviceData.values.first : 'N/A'}"),
+                                  Text("serviceData: ${serviceData}"),
+                                
                                   Text(
-                                      "TLM: ${tlm.serviceData.isNotEmpty ? tlm : 'N/A'}"),
+                                      "TLM: ${data.advertisementData.txPowerLevel}"),
+                                  // Text(
+                                  //     "TLM: ${tlm.serviceData.isNotEmpty ? tlm : 'N/A'}"),
                                   // Text(
                                   //     "TLM: ${tlm != null ? tlm.toString() : 'N/A'}"),
 
-                                  Text(
-                                    "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}",
-                                  ),
+                                  // Text(
+                                  //   "Tx Power: ${data.advertisementData.txPowerLevel?.toString() ?? 'N/A'}",
+                                  // ),
                                 ],
                               ),
                             ),
