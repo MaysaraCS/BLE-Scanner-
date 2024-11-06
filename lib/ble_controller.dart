@@ -3,7 +3,6 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
-import 'package:uuid/uuid.dart';
 
 class BleController extends GetxController {
   var _observedScanResults = <ScanResult>[].obs;
@@ -16,66 +15,9 @@ class BleController extends GetxController {
   ];
 
   // Reactive variable to hold the last URL found
-  var url = 'N/A'.obs; // Reactive variable
-
-  // Define advertising data properties
-  final int flagsLen = 0x02;
-  final int flagsType = 0x01;
-  final int flagsValue = 0x06;
-
-  final int uuidListLen = 0x03;
-  final int uuidListType = 0x03;
-  final Uint8List uuidListValue = Uint8List.fromList([0xAA, 0xFE]);
-
-  late final int serviceDataLen;
-  final int serviceDataType = 0x16;
-  final Uint8List serviceDataUUID = Uint8List.fromList([0xAA, 0xFE]);
-  late final Uint8List serviceData;
-
-  // Factory constructor for UID advertising
-  BleController.uid()
-      : serviceDataLen = 0x17,
-        serviceData = Uint8List.fromList([
-          0x00,
-          0x00,
-          0x01,
-          0x02,
-          0x03,
-          0x04,
-          0x05,
-          0x06,
-          0x07,
-          0x08,
-          0x09,
-          0x0A,
-          0x11,
-          0x22,
-          0x33,
-          0x44,
-          0x55,
-          0x66,
-          0x00,
-          0x00
-        ]);
-  // Factory constructor for TLM advertising
-  BleController.tlm()
-      : serviceDataLen = 0x11,
-        serviceData = Uint8List.fromList([
-          0x20,
-          0x00,
-          0x00,
-          0x64,
-          0x48,
-          0x80,
-          0x00,
-          0x00,
-          0x00,
-          0x01,
-          0x00,
-          0x00,
-          0x00,
-          0x02
-        ]);
+  var url = 'N/A'.obs;
+  var uid = 'N/A'.obs;
+  var tlmData = 'N/A'.obs;
 
   // Function to start scanning devices
   Future<void> scanDevices() async {
@@ -89,12 +31,18 @@ class BleController extends GetxController {
           for (var data in r.advertisementData.serviceData.entries) {
             var hex = decimalsToHex(data.value);
             _eddystoneUrlUpdate(hex, data.value, debugOrigin: 'serviceData');
+            _eddystoneUIDUpdate(hex, data.value, debugOrigin: 'serviceData');
+            _eddystoneTLMUpdate(hex, data.value, debugOrigin: 'serviceData');
           }
 
           // Process manufacturer data
           for (var data in r.advertisementData.manufacturerData.entries) {
             var hex = decimalsToHex(data.value);
             _eddystoneUrlUpdate(hex, data.value,
+                debugOrigin: 'manufacturerData');
+            _eddystoneUIDUpdate(hex, data.value,
+                debugOrigin: 'manufacturerData');
+            _eddystoneTLMUpdate(hex, data.value,
                 debugOrigin: 'manufacturerData');
           }
         }
@@ -109,6 +57,7 @@ class BleController extends GetxController {
     } else {
       print("Bluetooth scan permission denied.");
     }
+    //FlutterBluePlus.stopScan();
   }
 
   // Convert decimal bytes to hex string
@@ -133,6 +82,53 @@ class BleController extends GetxController {
     // Update the reactive URL variable
     url.value = generatedUrl;
     print("URL is $generatedUrl");
+  }
+
+  void _eddystoneUIDUpdate(String strData, List<int> originalInt,
+      {String? debugOrigin}) {
+    if (!strData.startsWith('00')) {
+      return;
+    }
+    //print("str data :  $strData");
+    //print("service data :  $serviceData");
+
+    // UID structure: Namespace ID (10 bytes) + Instance ID (6 bytes)
+    var namespaceId = originalInt
+        .sublist(2, 12)
+        .map((e) => e.toRadixString(16).padLeft(2, '0'))
+        .join('');
+    var instanceId = originalInt
+        .sublist(12, 18)
+        .map((e) => e.toRadixString(16).padLeft(2, '0'))
+        .join('');
+    uid.value = "Namespace ID: $namespaceId, Instance ID: $instanceId";
+    print("UID: ${uid.value}");
+  }
+
+  void _eddystoneTLMUpdate(String strData, List<int> originalInt,
+      {String? debugOrigin}) {
+    if (!strData.startsWith('20')) {
+      return;
+    }
+    //print("str data :  $strData");
+    //print("service data :  $serviceData");
+
+    // TLM structure: Battery Voltage (2 bytes), Temperature (2 bytes), Advertisement Count (4 bytes), Time Since Power-on (4 bytes)
+    var batteryVoltage = (originalInt[2] << 8) | originalInt[3];
+    var temperature = ((originalInt[4] << 8) | originalInt[5]) / 256;
+    var advCount = (originalInt[6] << 24) |
+        (originalInt[7] << 16) |
+        (originalInt[8] << 8) |
+        originalInt[9];
+    var timeSincePowerOn = ((originalInt[10] << 24) |
+            (originalInt[11] << 16) |
+            (originalInt[12] << 8) |
+            originalInt[13]) /
+        10;
+
+    tlmData.value =
+        "Battery: $batteryVoltage mV, Temp: $temperature°C, Adv Count: $advCount, Uptime: $timeSincePowerOn s";
+    print("TLM Data: ${tlmData.value}");
   }
 
   String? eddystoneUrlDefinition(String hex) {

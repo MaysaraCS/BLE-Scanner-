@@ -16,7 +16,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<BleController>(
-        init: BleController.uid(),
+        init: BleController(),
         builder: (controller) {
           return Column(
             children: [
@@ -66,10 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           final data = snapshot.data![index];
                           final serviceData =
                               data.advertisementData.serviceData;
-                              //final uid = BleController.uid();
-                              final tlm = BleController.tlm();
-
-
                           return Card(
                             elevation: 3,
                             margin: const EdgeInsets.symmetric(
@@ -97,13 +93,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Obx(() => Text(
                                       "URL: ${controller.url.value}")), // Displays the URL
 
-                                  Text(
-                                      "UUID Key: ${data.advertisementData.serviceUuids}"),
-                                  Text("serviceData: ${serviceData}"),
+                                  // Text(
+                                  //     "UUID Key: ${data.advertisementData.serviceUuids}"),
+                                  //Text("serviceData: ${serviceData}"),
                                   // Text(
                                   //     "TLM: ${data.advertisementData.txPowerLevel}"),
                                   Text(
-                                      "TLM: ${tlm.serviceData.isNotEmpty ? tlm : 'N/A'}"),
+                                      "UID: ${controller.uid.value}"),
+                                  Text(
+                                      "TLM: ${controller.tlmData.value}"),
                                 ],
                               ),
                             ),
