@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:ble_scanner_app/ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:typed_data';
-import 'package:uuid/uuid.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -63,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          var uuid = Uuid();
+                          
                           final data = snapshot.data![index];
                           final serviceData =
                               data.advertisementData.serviceData;
@@ -100,8 +99,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                   Text(
                                       "UUID Key: ${data.advertisementData.serviceUuids}"),
-                                  Text("UUID v1: ${uuid.v1()}"),
-                                  Text("UUID v4: ${uuid.v4()}"),
                                   Text("serviceData: ${serviceData}"),
                                   // Text(
                                   //     "TLM: ${data.advertisementData.txPowerLevel}"),

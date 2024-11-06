@@ -121,9 +121,14 @@ class BleController extends GetxController {
     if (!strData.startsWith('10')) {
       return;
     }
+    print("str data :  $strData");
+    //print("service data :  $serviceData");
 
     var generatedUrl = eddystoneUrlDefinition(strData.substring(4, 6)) ?? '';
+    print("URL before generated is $generatedUrl");
+
     generatedUrl += String.fromCharCodes(originalInt, 3);
+    print("URL after  generated is $generatedUrl");
 
     // Update the reactive URL variable
     url.value = generatedUrl;
